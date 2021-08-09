@@ -1,0 +1,18 @@
+.navi {
+    cursor: pointer;
+    color: #111;
+    padding: 6px 15px;
+    box-sizing: border-box;
+    text-decoration: none;
+    border-radius: 50px;
+}
+
+.navi:hover {
+    color: white;
+    background-color: #581DFF;
+}
+
+.navi.techstack:hover {
+    color: white;
+    background-color: #111;
+}
