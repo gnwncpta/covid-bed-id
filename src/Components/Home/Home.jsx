@@ -1,133 +1,126 @@
+import './Home.css';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import animatedLoading from '../../assets/loading-animated-white.svg';
 
-const HomeContainer = styled.section`
-    width: 80%;
-    margin: 30px auto;
+// Image
+import Hospital from '../../assets/image-hospital.png';
+
+// Components
+import Container from '../Styling/Container';
+import Beds from '../Beds/Beds';
+
+// API
+import getHospital from './getHospital';
+import getCities from './getCities';
+import { isSelector } from 'postcss-selector-parser';
+
+const HomeContainer = styled.div`
+    margin-top: 60px;
+    width: 100%;
+    background-color: #D6D6D6;
+    // border: 1px solid red;
 `;
 
-const FormContainer = styled.form`
-    text-align: center;
-    width: 500px;
+const Wrapper = styled.div`
+    width: 550px;
     margin: auto;
+    background-color: white;
 `;
 
-const OptionsContainer = styled.div`
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 25px;
+const HospitalContainer = styled.div`
+    padding: 10px 30px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 300px;
+    background-image: url('${Hospital}');
+    background-size: cover;
+
+    // border: 1px solid red;
+
+    @media (min-width: 320px) and (max-width: 480px) {
+        width: 100vw;
+    }
 `;
 
-const Label = styled.label`
-    color: #636363;
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 10px;
+const HospitalTitle = styled.p`
+    color: white;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 40px;
+`;
+
+const CariRumahSakit = styled.div`
+    width: 92%;
+    margin-top: 50px;
+    padding: 0 20px;
+    // border: 1px solid red;
+
+    @media (min-width: 320px) and (max-width: 480px) {
+        width: 57%;
+    }
+`;
+
+const CariRumahSakitTitle = styled.p`
+    color: #1A1A1A;
+    font-size: 16px;
+    font-weight: 700;
 `;
 
 const Select = styled.select`
-    color: #3E3E3E;
-    font-weight: 400;
-    padding: 14px 20px;
-    box-sizing: border-box;
-    border-radius: 13px;
-    border: none;
-    background-color: #EAEAEA;
+    width: 100%;
+    margin: 9px 0;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 1px solid #D6D6D6;
+    color: #9A9A9A;
+    background-color: white;
+
+    &:focus {
+        outline: none;
+    }
 `;
 
-const FindBedroom = styled.button`
-    margin-top: 25px;
-    cursor: pointer;
+const FindBtn = styled.button`
+    margin-top: 9px;
+    padding: 12px 0;
     width: 100%;
-    padding: 10px 0;
-    font-size: 16px;
-    font-weight: 700;
-    box-sizing: border-box;
-    border-radius: 12px;
-    border: none;
+    border: 1px solid #2773E4;
+    border-radius: 10px;
+    font-weight: 600;
     color: white;
-    background-color: #581DFF;
+    background-color: #2773E4;
 `;
 
 
 export default function Home(props) {
 
-    const [ provinsi, setProvinsi ] = useState([]);
-    const [ kota, setKota ] = useState([{id: 0, name: "-- Select City --"}]);
-    const [ provinsiID, setProvinsiID ] = useState('');
-    const [ kotaID, setKotaID ] = useState('');
-
-    useEffect(() => {
-
-        (async function getProvinsi(){
-            let data = fetch('https://rs-bed-covid-api.vercel.app/api/get-provinces')
-                .then(response => response.json())
-                .then(response => response)
-
-            const { provinces } = await data;
-            setProvinsi(provinces);
-        })();
-
-    }, []);
-
-
-    const ProvinsiList = provinsi.map((item, index) => {
-        const { id, name } = item;
-        return <option key={index+1} value={id} >{name}</option>
-    });
-
-    async function provinsiHandler(e){
-        let provinceID = e.target.value;
-        setProvinsiID(e.target.value);
-        let data = fetch(`https://rs-bed-covid-api.vercel.app/api/get-cities?provinceid=${provinceID}`)
-            .then(response => response.json())
-            .then(response => response)
-
-        const { cities } = await data;
-        setKota(cities);
-    }
-
-    const KotaList = kota.map((item, index) => {
-        const { id, name } = item;
-        return <option key={index+1} value={id} >{name}</option>
-    });
-
-    function kotaHandler(e){
-        const cityID = e.target.value;
-        setKotaID(cityID);
-    }
-
-    function findHandler(){
-        fetch(`https://rs-bed-covid-api.vercel.app/api/get-hospitals?provinceid=${provinsiID}&cityid=${kotaID}&type=1`)
-            .then(response => response.json())
-            .then(response => console.log(response))
-    }
-
     return (
 
         <HomeContainer>
-            <FormContainer>
-                <h1>Find Available Bed</h1>
+            <Wrapper className="wrapper">
+                <HospitalContainer className="hospitalContainer">
+                    <HospitalTitle>Find Available<br></br>
+                    Bed in Hospitals<br></br>
+                    Near You.</HospitalTitle>
+                </HospitalContainer>
 
-                <OptionsContainer>
-                    <Label htmlFor="provinsi">Provinsi</Label>
-                    <Select name="provinsi" id="provinsi" onChange={provinsiHandler}>
-                        {ProvinsiList}
+                <CariRumahSakit>
+                    <CariRumahSakitTitle>
+                        Cari Rumah Sakit Terdekat
+                    </CariRumahSakitTitle>
+
+                    <Select name="provinsi" id="provinsi">
+                        <option value="Select Here">Pilih Provinsi</option>
                     </Select>
-                </OptionsContainer>
 
-                <OptionsContainer>
-                    <Label htmlFor="kota">Kota</Label>
-                    <Select name="kota" id="kota" onChange={kotaHandler}>
-                        {KotaList}
+                    <Select name="provinsi" id="provinsi">
+                        <option value="Select Here">Pilih Kota</option>
                     </Select>
-                </OptionsContainer>
 
-                <FindBedroom onClick={findHandler}>Find Bedroom</FindBedroom>
-
-            </FormContainer>
+                    <FindBtn>Find Hospital</FindBtn>
+                </CariRumahSakit>
+            </Wrapper>
         </HomeContainer>
-            
     );
 }

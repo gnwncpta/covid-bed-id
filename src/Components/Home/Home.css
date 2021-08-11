@@ -1,0 +1,22 @@
+/* .animated-loading {
+    width: 35px;
+    height: 35px;
+} */
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+  
+    .wrapper {
+        width: 100vw;
+    }
+
+    .hospitalContainer {
+        width: 100px;
+        /* border: 1px solid red; */
+    }
+    
+}
