@@ -24,7 +24,7 @@ const NavigationContainer = styled.div`
     align-items: center;
     justify-content: space-between;  
     
-    overflow: hidden;
+    overflow-x: hidden;
 `;
 
 const TopContainer = styled.div`

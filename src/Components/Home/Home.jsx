@@ -17,6 +17,7 @@ import { isSelector } from 'postcss-selector-parser';
 
 const HomeContainer = styled.div`
     margin-top: 60px;
+    // margin-bottom: 200px;
     width: 100%;
     background-color: #D6D6D6;
     // border: 1px solid red;
@@ -24,8 +25,10 @@ const HomeContainer = styled.div`
 
 const Wrapper = styled.div`
     width: 550px;
+    height: 100%;
     margin: auto;
     background-color: white;
+    // border: 1px solid red;
 `;
 
 const HospitalContainer = styled.div`
@@ -52,19 +55,23 @@ const HospitalTitle = styled.p`
 
 const CariRumahSakit = styled.div`
     width: 92%;
-    margin-top: 50px;
-    padding: 0 20px;
+    margin-top: 20px;
+    margin-bottom: 150px;
+    padding: 30px 20px;
     // border: 1px solid red;
 
     @media (min-width: 320px) and (max-width: 480px) {
         width: 57%;
     }
+
+    background-color: white;
 `;
 
 const CariRumahSakitTitle = styled.p`
     color: #1A1A1A;
     font-size: 16px;
     font-weight: 700;
+    // border: 1px solid red;
 `;
 
 const Select = styled.select`
