@@ -86,7 +86,7 @@ export default function CardHospital(props){
         <CardHospitalContainer data-id={props.id}>
             <CardTitle>{props.rs}</CardTitle>
             <div>
-                <CardPhoneNumber><CardPhoneHighlighted>{props.phone}</CardPhoneHighlighted></CardPhoneNumber>
+                <CardPhoneNumber><CardPhoneHighlighted>{props.phone == null ? "-" : props.phone}</CardPhoneHighlighted></CardPhoneNumber>
                 <CardAddress>{props.address}</CardAddress>
                 <CardBed>
                     <CardBedAmount>{props.bed}</CardBedAmount>
