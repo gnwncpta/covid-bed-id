@@ -7,19 +7,16 @@ import animatedLoading from '../../assets/loading-animated-white.svg';
 import Hospital from '../../assets/image-hospital.png';
 
 // Components
-import Container from '../Styling/Container';
-import Beds from '../Beds/Beds';
-
-// API
-import getHospital from './getHospital';
-import getCities from './getCities';
-import { isSelector } from 'postcss-selector-parser';
+// import Container from '../Styling/Container';
+// import Beds from '../Beds/Beds';
+import AvailableBed from '../AvailableBed/AvailableBed';
 
 const HomeContainer = styled.div`
     margin-top: 60px;
+    height: fit-content;
     // margin-bottom: 200px;
     width: 100%;
-    background-color: #D6D6D6;
+    background-color: #f0f0f0;
     // border: 1px solid red;
 `;
 
@@ -29,12 +26,15 @@ const Wrapper = styled.div`
     margin: auto;
     background-color: white;
     // border: 1px solid red;
+
+    @media (max-width: 570px) {
+        width: 100vw;
+    }
 `;
 
 const HospitalContainer = styled.div`
     padding: 10px 30px;
     box-sizing: border-box;
-    width: 100%;
     height: 300px;
     background-image: url('${Hospital}');
     background-size: cover;
@@ -54,22 +54,20 @@ const HospitalTitle = styled.p`
 `;
 
 const CariRumahSakit = styled.div`
-    width: 92%;
+    width: fit-content;
     margin-top: 20px;
-    margin-bottom: 150px;
-    padding: 30px 20px;
+    margin-bottom: 30px;
+    padding: 0px 30px;
+    padding-top: 5px;
+    padding-bottom: 90px;
     // border: 1px solid red;
-
-    @media (min-width: 320px) and (max-width: 480px) {
-        width: 57%;
-    }
 
     background-color: white;
 `;
 
 const CariRumahSakitTitle = styled.p`
     color: #1A1A1A;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     // border: 1px solid red;
 `;
@@ -89,18 +87,85 @@ const Select = styled.select`
 `;
 
 const FindBtn = styled.button`
+    cursor: pointer;
     margin-top: 9px;
     padding: 12px 0;
     width: 100%;
     border: 1px solid #2773E4;
     border-radius: 10px;
     font-weight: 600;
+    font-size: 16px;
     color: white;
     background-color: #2773E4;
 `;
 
 
 export default function Home(props) {
+
+    const [ provinsiCollection, setProvinsiCollection ] = useState([]);
+    const [ selectedProvinsi, setSelectedProvinsi ] = useState('');
+
+    const [ kotaCollection, setKotaCollection ] = useState([]);
+    const [ selectedKota, setSelectedKota ] = useState('');
+
+    const [ hospitalCollection, setHospitalCollection ] = useState([]);
+
+    const [ showAvailableBed, setShowAvailabeBed ] = useState(false);
+
+
+    useEffect(() => {
+        (async function getProvinsi(){
+            let result = fetch('https://rs-bed-covid-api.vercel.app/api/get-provinces')
+                .then(response => response.json())
+                .then(response => response)
+
+            const { provinces } = await result;
+            setProvinsiCollection(provinces);
+
+        })();
+    }, []);
+
+    const ProvinsiList = provinsiCollection.map((item, index) => {
+        const { id, name } = item;
+        return <option key={index+1} value={id}>{name}</option>
+    });
+
+    const KotaList = kotaCollection.map((item, index) => {
+        const { id, name } = item;
+        return <option key={index+1} value={id}>{name}</option>
+    });
+
+    useEffect(() => {
+        if(selectedProvinsi.length){
+            (async function getCity(){
+                let city = fetch(`https://rs-bed-covid-api.vercel.app/api/get-cities?provinceid=${selectedProvinsi}`)
+                    .then(response => response.json())
+                    .then(response => response)
+
+                const { cities } = await city;
+                setKotaCollection(cities);
+            })();
+        }
+    }, [selectedProvinsi]);
+
+    const buttonEvent = () => {
+        if(selectedProvinsi.length && selectedKota.length){
+            (async function getHospital(){
+                let hospital = fetch(`https://rs-bed-covid-api.vercel.app/api/get-hospitals?provinceid=${selectedProvinsi}&cityid=${selectedKota}&type=1`)
+                    .then(response => response.json())
+                    .then(response => response)
+
+                const { hospitals } = await hospital;
+                setHospitalCollection(hospitals);
+            })();
+
+            setShowAvailabeBed(true);
+        } else {
+            alert('Please insert the Province / City!');
+        }
+
+        console.log(hospitalCollection);
+    }
 
     return (
 
@@ -117,16 +182,23 @@ export default function Home(props) {
                         Cari Rumah Sakit Terdekat
                     </CariRumahSakitTitle>
 
-                    <Select name="provinsi" id="provinsi">
-                        <option value="Select Here">Pilih Provinsi</option>
+                    <Select name="provinsi" id="provinsi" onChange={(e) => setSelectedProvinsi(e.target.value)}>
+                        <option value="none" defaultValue>Pilih Provinsi</option>
+                        {ProvinsiList}
                     </Select>
 
-                    <Select name="provinsi" id="provinsi">
-                        <option value="Select Here">Pilih Kota</option>
+                    <Select name="provinsi" id="provinsi" onChange={(e) => setSelectedKota(e.target.value)}>
+                        <option value="none" defaultValue>Pilih Kota</option>
+                        {KotaList}
                     </Select>
 
-                    <FindBtn>Find Hospital</FindBtn>
+                    <FindBtn onClick={buttonEvent}>Find Hospital</FindBtn>
                 </CariRumahSakit>
+
+                <AvailableBed 
+                    show={showAvailableBed}
+                    data={hospitalCollection}
+                />
             </Wrapper>
         </HomeContainer>
     );

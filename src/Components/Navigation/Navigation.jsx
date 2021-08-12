@@ -38,6 +38,7 @@ const TopContainer = styled.div`
     align-items: center;
 
     background-color: #2773E4;
+    z-index: 9;
 
     @media (min-width: 320px) and (max-width: 480px) {
         width: 100vw;
