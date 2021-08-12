@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Home from '../Home/Home';
-import Example from '../Example/Example';
 import Logo from '../../assets/Logo.svg';
 import HomeIcon from '../../assets/home-icon.svg';
 import MenuIcon from '../../assets/menu-icon.svg';
