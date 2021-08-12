@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import CardHospital from '../CardHospital/CardHospital';
+import Loading from '../Loading/Loading';
 
 const AvailableBedContainer = styled.div`
     // border: 1px solid red;
@@ -18,7 +20,12 @@ const HighlightedCity = styled.span`
 `;
 
 export default function AvailableBed(props){
-    const { show, data, city = "Jakarta Selatan" } = props;
+    const { show, data, city: { name }, showLoading, setShowLoading } = props;
+    
+    useEffect(() => {
+        setShowLoading(showLoading ? false : true);
+    }, [data])
+
     if(!show){
         return null;
     }
@@ -29,10 +36,12 @@ export default function AvailableBed(props){
     });
 
     return (
-        <AvailableBedContainer>
+        <AvailableBedContainer id="availableBedContainer">
             <AvailableBedTitle>
-                Available Bed on <HighlightedCity>{city}</HighlightedCity>
+                Available Bed on <HighlightedCity>{name}</HighlightedCity>
             </AvailableBedTitle>
+
+            <Loading show={showLoading} />
 
             {CardHospitalList}
         </AvailableBedContainer>
