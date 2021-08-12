@@ -1,14 +1,12 @@
 import './Home.css';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import animatedLoading from '../../assets/loading-animated-white.svg';
 
 // Image
 import Hospital from '../../assets/image-hospital.png';
 
 // Components
-// import Container from '../Styling/Container';
-// import Beds from '../Beds/Beds';
+import EmptyCard from '../EmptyCard/EmptyCard';
 import AvailableBed from '../AvailableBed/AvailableBed';
 
 const HomeContainer = styled.div`
@@ -24,6 +22,7 @@ const Wrapper = styled.div`
     width: 550px;
     height: 100%;
     margin: auto;
+    padding-bottom: 60px;
     background-color: white;
     // border: 1px solid red;
 
@@ -111,6 +110,10 @@ export default function Home(props) {
     const [ hospitalCollection, setHospitalCollection ] = useState([]);
 
     const [ showAvailableBed, setShowAvailabeBed ] = useState(false);
+    const [ showEmptyCard, setShowEmptyCard ] = useState(true);
+    const [ showLoading, setShowLoading ] = useState(false);   
+    
+    const [ cityName, setCityName ] = useState('');
 
 
     useEffect(() => {
@@ -148,7 +151,16 @@ export default function Home(props) {
         }
     }, [selectedProvinsi]);
 
-    const buttonEvent = () => {
+    const buttonEvent = (element) => {
+        console.log(kotaCollection);
+
+        const city = kotaCollection.filter(item => {
+            const { id, name } = item;
+            return selectedKota == id;
+        })[0];
+
+        setCityName(city);
+
         if(selectedProvinsi.length && selectedKota.length){
             (async function getHospital(){
                 let hospital = fetch(`https://rs-bed-covid-api.vercel.app/api/get-hospitals?provinceid=${selectedProvinsi}&cityid=${selectedKota}&type=1`)
@@ -160,12 +172,14 @@ export default function Home(props) {
             })();
 
             setShowAvailabeBed(true);
+            setShowEmptyCard(false);
+            setShowLoading(true);
+            console.log(cityName)
         } else {
             alert('Please insert the Province / City!');
         }
-
-        console.log(hospitalCollection);
     }
+
 
     return (
 
@@ -195,10 +209,16 @@ export default function Home(props) {
                     <FindBtn onClick={buttonEvent}>Find Hospital</FindBtn>
                 </CariRumahSakit>
 
+                <EmptyCard show={showEmptyCard} />
+
                 <AvailableBed 
                     show={showAvailableBed}
+                    city={cityName}
                     data={hospitalCollection}
+                    showLoading={showLoading}
+                    setShowLoading={setShowLoading}
                 />
+                
             </Wrapper>
         </HomeContainer>
     );
