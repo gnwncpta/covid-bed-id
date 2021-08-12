@@ -24,7 +24,7 @@ export default function AvailableBed(props){
     
     useEffect(() => {
         setShowLoading(showLoading ? false : true);
-    }, [data])
+    }, [data]);
 
     if(!show){
         return null;
