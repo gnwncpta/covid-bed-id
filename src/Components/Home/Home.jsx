@@ -152,7 +152,7 @@ export default function Home(props) {
     }, [selectedProvinsi]);
 
     const buttonEvent = (element) => {
-        console.log(kotaCollection);
+        // console.log(kotaCollection);
 
         const city = kotaCollection.filter(item => {
             const { id, name } = item;
@@ -174,7 +174,6 @@ export default function Home(props) {
             setShowAvailabeBed(true);
             setShowEmptyCard(false);
             setShowLoading(true);
-            console.log(cityName)
         } else {
             alert('Please insert the Province / City!');
         }
