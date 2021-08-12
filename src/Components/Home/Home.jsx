@@ -154,11 +154,7 @@ export default function Home(props) {
     const buttonEvent = (element) => {
         // console.log(kotaCollection);
 
-        const city = kotaCollection.filter(item => {
-            const { id, name } = item;
-            return selectedKota == id;
-        })[0];
-
+        const city = kotaCollection.filter(item =>  selectedKota == item.id)[0];
         setCityName(city);
 
         if(selectedProvinsi.length && selectedKota.length){
