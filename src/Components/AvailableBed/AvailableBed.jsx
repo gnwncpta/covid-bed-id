@@ -43,7 +43,9 @@ export default function AvailableBed(props){
 
             <Loading show={showLoading} />
 
-            {CardHospitalList}
+            {!showLoading && 
+                CardHospitalList
+            }
         </AvailableBedContainer>
     )
 }
