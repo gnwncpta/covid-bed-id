@@ -4,7 +4,7 @@ const EmptyCardContainer = styled.div`
     height: fit-content;
     padding: 50px 20px;
     margin-top: 50px;
-    margin: auto;
+    margin: auto 30px;
     box-sizing: border-box;
     background-color: white;
     border-radius: 10px;
