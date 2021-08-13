@@ -20,7 +20,7 @@ const HighlightedCity = styled.span`
 `;
 
 export default function AvailableBed(props){
-    const { show, data, city: { name }, showLoading, setShowLoading } = props;
+    const { show, data, city, showLoading, setShowLoading } = props;
     
     useEffect(() => {
         setShowLoading(showLoading ? false : true);
@@ -38,7 +38,7 @@ export default function AvailableBed(props){
     return (
         <AvailableBedContainer id="availableBedContainer">
             <AvailableBedTitle>
-                Available Bed on <HighlightedCity>{name}</HighlightedCity>
+                Available Bed on <HighlightedCity>{city.name}</HighlightedCity>
             </AvailableBedTitle>
 
             <Loading show={showLoading} />

@@ -1,8 +1,11 @@
 import './Navigation.css';
-import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom';
+import { useState } from 'react';
+import { BrowserRouter as Router, Switch, Link, Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Home from '../Home/Home';
+import Menu from '../Menu/Menu';
+import EmergencyContact from '../EmergencyContact/EmergencyContact';
 import Logo from '../../assets/Logo.svg';
 import HomeIcon from '../../assets/home-icon.svg';
 import MenuIcon from '../../assets/menu-icon.svg';
@@ -39,18 +42,24 @@ const TopContainer = styled.div`
     background-color: #2773E4;
     z-index: 9;
 
+    // border: 1px solid red;
+
     @media (min-width: 320px) and (max-width: 480px) {
         width: 100vw;
     }
 `;
 
 const Wrapper = styled.div`
-    width: 40%;
+    width: 550px;
     margin: auto;
+    padding: ${props => props.top ? "0 30px" : "0"};
+    box-sizing: border-box;
 
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: ${props => props.top ? "space-between" : "space-around"};
+
+    // border: 1px solid red;
 
     @media (min-width: 320px) and (max-width: 480px) {
         width: 100%;
@@ -113,31 +122,46 @@ const Title = styled.p`
 `;
 
 export default function Navigation(props){
+
+    const [ emergency, setEmergency ] = useState(false);
+
     return (
         <Router>
             <NavigationContainer>
 
                 <TopContainer>
-                    <Wrapper>
+                    <Wrapper top>
                         <LogoImage />
                     </Wrapper>
                 </TopContainer>
 
                 <Switch>
                     <Route exact path="/">
-                        <Home />
+                        {emergency ? <Redirect to="/emergency-contact" /> : <Home setEmergency={setEmergency}/>}
+                    </Route>
+
+                    <Route path="/menu">
+                        <Menu />
+                    </Route>
+
+                    <Route path="/emergency-contact">
+                        <EmergencyContact />
                     </Route>
                 </Switch>
 
                 <BottomContainer>
-                    <Wrapper>
-                        <Button>
-                            <HomeIc></HomeIc>
-                            <Title>Home</Title>
+                    <Wrapper bottom>
+                        <Button onClick={() => setEmergency(false)}>
+                            <Link to="/" className="goto">
+                                <HomeIc></HomeIc>
+                                <Title>Home</Title>
+                            </Link>
                         </Button>
                         <Button>
-                            <MenuIc></MenuIc>
-                            <Title>Menu</Title>
+                            <Link to="/menu" className="goto">
+                                <MenuIc></MenuIc>
+                                <Title>Menu</Title>
+                            </Link>
                         </Button>
                     </Wrapper>
                 </BottomContainer>

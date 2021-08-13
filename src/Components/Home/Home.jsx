@@ -8,14 +8,16 @@ import Hospital from '../../assets/image-hospital.png';
 // Components
 import EmptyCard from '../EmptyCard/EmptyCard';
 import AvailableBed from '../AvailableBed/AvailableBed';
+import EmergencyContact from '../EmergencyContact/EmergencyContact';
 
 const HomeContainer = styled.div`
     margin-top: 60px;
     height: fit-content;
-    // margin-bottom: 200px;
     width: 100%;
     background-color: #f0f0f0;
     // border: 1px solid red;
+
+    display: ${props => props.show ? "block" : "none"};
 `;
 
 const Wrapper = styled.div`
@@ -27,7 +29,50 @@ const Wrapper = styled.div`
     // border: 1px solid red;
 
     @media (max-width: 570px) {
-        width: 100vw;
+        width: 100%;
+    }
+`;
+
+const EmergencyContactButton = styled.div`
+    padding: 30px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const EmergencyContactIcon = styled.div`
+    width: 40px;
+    height: 40px;
+    opacity: .4;
+    border-radius: 50px;
+    background-color: #2773E4;
+`;
+
+const EmergencyContactText = styled.p`
+    margin: 0;
+    color: ${props => props.desc ? "grey" : "#111"};
+    font-size: ${props => props.desc ? "12px" : "18px"};
+    font-weight: ${props => props.desc ? "400" : "700"};
+
+    @media (min-width: 320px) and (max-width: 480px) { 
+        width: 200px;
+    }
+`;
+
+const EmergencyContactArrow = styled.div`
+    width: 10px;
+    height: 10px;
+    border-top: 3px solid #2773E4;
+    border-right: 3px solid #2773E4;
+    border-radius: 2px;
+
+    transform: rotate(45deg);
+
+    @media (min-width: 320px) and (max-width: 480px) {
+        width: 7px;
+        height: 7px;
     }
 `;
 
@@ -101,11 +146,13 @@ const FindBtn = styled.button`
 
 export default function Home(props) {
 
+    const [ showHome, setShowHome ] = useState(true);
+
     const [ provinsiCollection, setProvinsiCollection ] = useState([]);
-    const [ selectedProvinsi, setSelectedProvinsi ] = useState('');
+    const [ selectedProvinsi, setSelectedProvinsi ] = useState('none');
 
     const [ kotaCollection, setKotaCollection ] = useState([]);
-    const [ selectedKota, setSelectedKota ] = useState('');
+    const [ selectedKota, setSelectedKota ] = useState('none');
 
     const [ hospitalCollection, setHospitalCollection ] = useState([]);
 
@@ -139,7 +186,7 @@ export default function Home(props) {
     });
 
     useEffect(() => {
-        if(selectedProvinsi.length){
+        if(selectedProvinsi !== "none"){
             (async function getCity(){
                 let city = fetch(`https://rs-bed-covid-api.vercel.app/api/get-cities?provinceid=${selectedProvinsi}`)
                     .then(response => response.json())
@@ -154,10 +201,11 @@ export default function Home(props) {
     const buttonEvent = (element) => {
         // console.log(kotaCollection);
 
-        const city = kotaCollection.filter(item =>  selectedKota == item.id)[0];
-        setCityName(city);
+        
+        if(selectedProvinsi !== "none" && selectedKota !== "none"){
+            const city = kotaCollection.filter(item => selectedKota === item.id)[0];
+            setCityName(city);
 
-        if(selectedProvinsi.length && selectedKota.length){
             (async function getHospital(){
                 let hospital = fetch(`https://rs-bed-covid-api.vercel.app/api/get-hospitals?provinceid=${selectedProvinsi}&cityid=${selectedKota}&type=1`)
                     .then(response => response.json())
@@ -171,20 +219,34 @@ export default function Home(props) {
             setShowEmptyCard(false);
             setShowLoading(true);
         } else {
-            alert('Please insert the Province / City!');
+            // setCityName('---');
+            setShowAvailabeBed(false);
+            setShowEmptyCard(true);
+            return alert('Please insert the Province / City!');
         }
     }
 
 
     return (
 
-        <HomeContainer>
+        <HomeContainer show={showHome}>
             <Wrapper className="wrapper">
                 <HospitalContainer className="hospitalContainer">
                     <HospitalTitle>Find Available<br></br>
                     Bed in Hospitals<br></br>
                     Near You.</HospitalTitle>
                 </HospitalContainer>
+
+                <EmergencyContactButton onClick={() => props.setEmergency(true)}>
+                    <EmergencyContactIcon></EmergencyContactIcon>
+
+                    <div className="typography">
+                        <EmergencyContactText>Kontak Darurat</EmergencyContactText>
+                        <EmergencyContactText desc>Situs dan Kontak penting terkait COVID-19</EmergencyContactText>
+                    </div>
+
+                    <EmergencyContactArrow></EmergencyContactArrow>
+                </EmergencyContactButton>
 
                 <CariRumahSakit>
                     <CariRumahSakitTitle>
