@@ -63,7 +63,7 @@ export default function ContactCard(props){
         <ContactCardContainer>
             <ContactCardName>{props.name}</ContactCardName>
             <ContactCardDesc>{props.desc}</ContactCardDesc>
-            <ContactCardButton href={props.link}>Cek Sekarang</ContactCardButton>
+            <ContactCardButton href={props.link} targe="_blank">Cek Sekarang</ContactCardButton>
         </ContactCardContainer>
     )
 }
