@@ -35,9 +35,13 @@ const ContactCardDesc = styled.p`
     }
 `;
 
-const ContactCardButton = styled.button`
+const ContactCardButton = styled.a`
+    display: inline-bloock;
+    text-decoration: none;
+    text-align: center;
+
     cursor: pointer;
-    width: 100%;
+    // width: 100%;
     margin-top: 25px;
     padding: 7px 30px;
 
@@ -59,7 +63,7 @@ export default function ContactCard(props){
         <ContactCardContainer>
             <ContactCardName>{props.name}</ContactCardName>
             <ContactCardDesc>{props.desc}</ContactCardDesc>
-            <ContactCardButton>Cek Sekarang</ContactCardButton>
+            <ContactCardButton href={props.link}>Cek Sekarang</ContactCardButton>
         </ContactCardContainer>
     )
 }

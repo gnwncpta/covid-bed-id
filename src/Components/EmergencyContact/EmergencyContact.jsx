@@ -195,10 +195,10 @@ export default function EmergencyContact(props){
                 </Header>
 
                 <CardsContainer>
-                    <ContactCard name="Farma Plus" desc="Situs Ketersediaan Obat di Daerahmu"/>
-                    <ContactCard name="SINARAP V3.0" desc="Situs Sistem Informasi Rawat Inap"/>
-                    <ContactCard name="Lentera Svarga" desc="Situs Layanan Krematorium, Mobil Jenazah, Peti Mati"/>
-                    <ContactCard name="Info Oxygen" desc="Informasi Tabung Oksigen di Daerahmu"/>
+                    <ContactCard name="Farma Plus" desc="Situs Ketersediaan Obat di Daerahmu" link="https://yankes.kemkes.go.id/app/siranap/"/>
+                    <ContactCard name="SINARAP V3.0" desc="Situs Sistem Informasi Rawat Inap" link="https://farmaplus.kemkes.go.id/"/>
+                    <ContactCard name="Lentera Svarga" desc="Situs Layanan Krematorium, Mobil Jenazah, Peti Mati" link="https://lenterasvarga.carrd.co/"/>
+                    <ContactCard name="Info Oxygen" desc="Informasi Tabung Oksigen di Daerahmu" link="https://oksigen.carrd.co/"/>
                 </CardsContainer>
 
                 <PenyediaFaskes>
