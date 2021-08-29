@@ -31,8 +31,15 @@ export default function AvailableBed(props){
     }
 
     const CardHospitalList = data.map((item, index) => {
-        const { id, name, address, phone, bed_availability } = item;
-        return <CardHospital key={index+1} id={id} rs={name} phone={phone} address={address} bed={bed_availability} />
+        const { id, name, address, phone, bed_availability, info } = item;
+        return <CardHospital 
+            key={index+1} 
+            id={id} 
+            rs={name}
+            info={info}
+            phone={phone} 
+            address={address} 
+            bed={bed_availability} />
     });
 
     return (
