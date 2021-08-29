@@ -1,4 +1,6 @@
 import './Home.css';
+import 'tailwindcss/tailwind.css';
+import KontakIcon from '../../assets/KontakIcon.svg';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
@@ -9,13 +11,18 @@ import Hospital from '../../assets/image-hospital.png';
 import EmptyCard from '../EmptyCard/EmptyCard';
 import AvailableBed from '../AvailableBed/AvailableBed';
 import EmergencyContact from '../EmergencyContact/EmergencyContact';
+import ProvinsiDropdown from './ProvinsiDropdown/ProvinsiDropdown';
+import KotaDropdown from './KotaDropdown/KotaDropdown';
+import PilihProvinsi from './PilihProvinsi/PilihProvinsi';
+import PilihKota from './PilihKota/PilihKota';
 
 const HomeContainer = styled.div`
     margin-top: 60px;
+    margin-bottom: 80px;
     height: fit-content;
     width: 100%;
     background-color: #f0f0f0;
-    // border: 1px solid red;
+    border: 1px solid red;
 
     display: ${props => props.show ? "block" : "none"};
 `;
@@ -42,12 +49,41 @@ const EmergencyContactButton = styled.div`
     justify-content: space-between;
 `;
 
-const EmergencyContactIcon = styled.div`
-    width: 40px;
-    height: 40px;
-    opacity: .4;
+const EmergencyLeftButton = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-betweeen;
+`;
+
+const EmergencyTypography = styled.div`
+    margin-left: 20px;
+`;
+
+const EmergencyContactIconWrapper = styled.div`
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+`;
+
+const EmergencyContactIcon = styled.img`
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+    position: absolute
+`;
+
+const EmergencyContactBg = styled.div`
+    width: inherit;
+    height: inherit;
     border-radius: 50px;
-    background-color: #2773E4;
+    opacity: .15;
+    background-color: rgb(39, 115, 228);
 `;
 
 const EmergencyContactText = styled.p`
@@ -92,24 +128,28 @@ const HospitalContainer = styled.div`
 
 const HospitalTitle = styled.p`
     color: white;
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 700;
-    line-height: 40px;
+    line-height: 35px;
+    margin-top: 15px;
 `;
 
 const CariRumahSakit = styled.div`
-    width: fit-content;
-    margin-top: 20px;
+    width: 100%;
+    margin-top: 10px;
     margin-bottom: 30px;
     padding: 0px 30px;
     padding-top: 5px;
-    padding-bottom: 90px;
+    padding-bottom: 80px;
     // border: 1px solid red;
 
     background-color: white;
+
+    position: relative;
 `;
 
 const CariRumahSakitTitle = styled.p`
+    margin: 15px 0;
     color: #1A1A1A;
     font-size: 18px;
     font-weight: 700;
@@ -162,6 +202,11 @@ export default function Home(props) {
     
     const [ cityName, setCityName ] = useState('');
 
+    const [ showProvinsiDropdown, setShowProvinsiDropdown ] = useState(false);
+    const [ showKotaDropdown, setShowKotaDropdown ] = useState(false);
+    const [ pilihProvinsi, setPilihProvinsi ] = useState('Pilih Provinsi');
+    const [ pilihKota, setPilihKota ] = useState('Pilih Kota');
+
 
     useEffect(() => {
         (async function getProvinsi(){
@@ -193,12 +238,13 @@ export default function Home(props) {
                     .then(response => response)
 
                 const { cities } = await city;
+                console.log(cities);
                 setKotaCollection(cities);
             })();
         }
     }, [selectedProvinsi]);
 
-    const buttonEvent = (element) => {
+    const ButtonEvent = (element) => {
         // console.log(kotaCollection);
 
         
@@ -226,24 +272,37 @@ export default function Home(props) {
         }
     }
 
+    const HomeEvent = () => {
+        if(showProvinsiDropdown){
+            setShowProvinsiDropdown(false);
+        }
+
+        if(showKotaDropdown){
+            setShowKotaDropdown(false);
+        }
+    }
 
     return (
 
-        <HomeContainer show={showHome}>
+        <HomeContainer show={showHome} onClick={HomeEvent}>
             <Wrapper className="wrapper">
+
                 <HospitalContainer className="hospitalContainer">
-                    <HospitalTitle>Find Available<br></br>
-                    Bed in Hospitals<br></br>
-                    Near You.</HospitalTitle>
+                    <HospitalTitle>Cari Ketersediaan<br></br>Tempat Tidur di Rumah Sakit.<br></br></HospitalTitle>
                 </HospitalContainer>
 
                 <EmergencyContactButton onClick={() => props.setEmergency(true)}>
-                    <EmergencyContactIcon></EmergencyContactIcon>
+                    <EmergencyLeftButton>
+                        <EmergencyContactIconWrapper>
+                            <EmergencyContactIcon src={KontakIcon}/>
+                            <EmergencyContactBg></EmergencyContactBg>
+                        </EmergencyContactIconWrapper>
 
-                    <div className="typography">
-                        <EmergencyContactText>Kontak Darurat</EmergencyContactText>
-                        <EmergencyContactText desc>Situs dan Kontak penting terkait COVID-19</EmergencyContactText>
-                    </div>
+                        <EmergencyTypography>
+                            <EmergencyContactText>Kontak Darurat</EmergencyContactText>
+                            <EmergencyContactText desc>Situs dan Kontak penting terkait COVID-19</EmergencyContactText>
+                        </EmergencyTypography>
+                    </EmergencyLeftButton>
 
                     <EmergencyContactArrow></EmergencyContactArrow>
                 </EmergencyContactButton>
@@ -253,17 +312,46 @@ export default function Home(props) {
                         Cari Rumah Sakit Terdekat
                     </CariRumahSakitTitle>
 
-                    <Select name="provinsi" id="provinsi" onChange={(e) => setSelectedProvinsi(e.target.value)}>
-                        <option value="none" defaultValue>Pilih Provinsi</option>
-                        {ProvinsiList}
-                    </Select>
+                    <div className="relative">
+                        <PilihProvinsi
+                            pilihProvinsi={pilihProvinsi}
+                            showProvinsiDropdown={showProvinsiDropdown}
+                            setShowProvinsiDropdown={setShowProvinsiDropdown}
+                            />
+                        
+                        <ProvinsiDropdown 
+                            show={showProvinsiDropdown}
+                            dataCity={provinsiCollection} 
+                            setPilihProvinsi={setPilihProvinsi}
+                            setSelectedProvinsi={setSelectedProvinsi} 
+                            setShowProvinsiDropdown={setShowProvinsiDropdown}
+                        />
+                    </div>
 
-                    <Select name="provinsi" id="provinsi" onChange={(e) => setSelectedKota(e.target.value)}>
+                    <div className="relative">
+                        <PilihKota
+                            pilihKota={pilihKota}
+                            showKotaDropdown={showKotaDropdown}
+                            setShowKotaDropdown={setShowKotaDropdown}
+                        />
+
+                        <KotaDropdown
+                            show={showKotaDropdown}
+                            dataCity={kotaCollection}
+                            setPilihKota={setPilihKota}
+                            setSelectedKota={setSelectedKota}
+                            setShowKotaDropdown={setShowKotaDropdown}
+                        />
+                    </div>
+
+
+
+                    {/* <Select name="provinsi" id="provinsi" onChange={(e) => setSelectedKota(e.target.value)}>
                         <option value="none" defaultValue>Pilih Kota</option>
                         {KotaList}
-                    </Select>
+                    </Select> */}
 
-                    <FindBtn onClick={buttonEvent}>Find Hospital</FindBtn>
+                    <FindBtn onClick={ButtonEvent}>Find Hospital</FindBtn>
                 </CariRumahSakit>
 
                 <EmptyCard show={showEmptyCard} />
