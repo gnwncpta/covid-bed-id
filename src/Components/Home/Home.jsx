@@ -15,6 +15,7 @@ import ProvinsiDropdown from './ProvinsiDropdown/ProvinsiDropdown';
 import KotaDropdown from './KotaDropdown/KotaDropdown';
 import PilihProvinsi from './PilihProvinsi/PilihProvinsi';
 import PilihKota from './PilihKota/PilihKota';
+import FindHospital from './FindHospital/FindHospital';
 
 const HomeContainer = styled.div`
     margin-top: 60px;
@@ -168,19 +169,6 @@ const Select = styled.select`
     &:focus {
         outline: none;
     }
-`;
-
-const FindBtn = styled.button`
-    cursor: pointer;
-    margin-top: 9px;
-    padding: 12px 0;
-    width: 100%;
-    border: 1px solid #2773E4;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 16px;
-    color: white;
-    background-color: #2773E4;
 `;
 
 
@@ -351,7 +339,8 @@ export default function Home(props) {
                         {KotaList}
                     </Select> */}
 
-                    <FindBtn onClick={ButtonEvent}>Find Hospital</FindBtn>
+                    {/* <FindBtn onClick={ButtonEvent}>Find Hospital</FindBtn> */}
+                    <FindHospital ButtonEvent={ButtonEvent}>Find Hospital</FindHospital>
                 </CariRumahSakit>
 
                 <EmptyCard show={showEmptyCard} />
