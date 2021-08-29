@@ -10,7 +10,7 @@ import Menu from '../Menu/Menu';
 import MenuNavigation from '../MenuNavigation/MenuNavigation';
 import EmergencyContact from '../EmergencyContact/EmergencyContact';
 import Logo from '../../assets/Logo.svg';
-import HomeIcon from '../../assets/home-icon.svg';
+import HomeIcon from '../../assets/HomeBlue.svg';
 import MenuIcon from '../../assets/menu-icon.svg';
 
 const LogoImage = styled.div`
@@ -18,6 +18,7 @@ const LogoImage = styled.div`
     height:calc(75px / 2);
     background-size: cover;
     background-image: url(${Logo});
+    cursor: pointer;
 `;
 
 const MenuButton = styled.div`
@@ -129,8 +130,8 @@ const Button = styled.button`
 
 const HomeIc = styled.div`
     margin-top: 10px;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     background-image: url('${HomeIcon}');
     background-size: cover;
 `;
@@ -158,14 +159,19 @@ export default function Navigation(props){
         alert('Blue Nav Clicked.');
     }
 
+    const LogoEvent = () => {
+        <Redirect to="/" />
+    }
 
     return (
         <Router>
             <NavigationContainer>
 
-                <TopContainer onClick={TopContainerHandler}>
+                <TopContainer>
                     <Wrapper top>
-                        <LogoImage />
+                        <Link to="/" >
+                            <LogoImage />
+                        </Link>
 
                         <MenuButton highlighted={menu} onClick={() => setMenu(menu ? false : true)}>
                             <img src={menu ? X : Hamburger} width="30px" />
@@ -174,6 +180,7 @@ export default function Navigation(props){
                 </TopContainer>
 
                 <Switch>
+
                     <Route exact path="/">
                         <MenuNavigation show={menu} setEmergency={setEmergency} setMenu={setMenu} />
                         {emergency ? <Redirect to="/emergency-contact" /> : <Home setEmergency={setEmergency} />}
