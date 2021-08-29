@@ -23,17 +23,16 @@ export default function KotaDropdown(props){
     return (
         <div>
             {!dataCity.length && 
-                <div className="absolute top-14 z-3 w-full bg-white mx-auto py-5 border rounded-lg border-gray-300 shadow-lg">
+                <div className="absolute top-15 z-3 w-full bg-white mx-auto py-5 border rounded-lg border-gray-300 shadow-lg">
                     <p className="text-gray-400 py-2 px-6 my-4">Mohon untuk memilih provinsi terlebih dahulu</p>
                 </div>
             }
 
             {dataCity.length > 0 &&
-                <div className="absolute top-14 z-3 w-full h-80 bg-white mx-auto py-1 border rounded-lg border-gray-300 overflow-scroll shadow-lg">
+                <div className="absolute top-15 z-3 w-full h-80 bg-white mx-auto py-1 border rounded-lg border-gray-300 overflow-scroll shadow-lg">
                     {CityCollection}
                 </div>
             }
-
         </div>
     );
 }
