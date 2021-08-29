@@ -1,3 +1,4 @@
+import 'tailwindcss/tailwind.css';
 import styled from 'styled-components';
 
 const CardHospitalContainer = styled.div`
@@ -24,6 +25,9 @@ const CardHospitalContainer = styled.div`
 const CardTitle = styled.h1`
     color: #111;
     font-size: 20px;
+    font-weight: 600;
+    margin-top: 0px;
+    margin-bottom: 20px;
 `;
 
 const CardPhoneHighlighted = styled.span`
@@ -37,6 +41,7 @@ const CardPhoneNumber = styled.p`
     color: #111;
     font-size: 14px;
     z-index: -1;
+    margin-bottom: 10px;
 `;
 
 const CardAddress = styled.p`
@@ -84,10 +89,16 @@ const CardBedDesc = styled.p`
 export default function CardHospital(props){
     return (
         <CardHospitalContainer data-id={props.id}>
+            <p className="text-gray-400 text-xs mt-1">{props.info}</p>
             <CardTitle>{props.rs}</CardTitle>
+
             <div>
-                <CardPhoneNumber><CardPhoneHighlighted>{props.phone == null ? "-" : props.phone}</CardPhoneHighlighted></CardPhoneNumber>
+                <CardPhoneNumber>
+                    <CardPhoneHighlighted>{props.phone == null ? "-" : props.phone}</CardPhoneHighlighted>
+                </CardPhoneNumber>
+
                 <CardAddress>{props.address}</CardAddress>
+
                 <CardBed>
                     <CardBedAmount>{props.bed}</CardBedAmount>
                     <CardBedDesc>Available Bed</CardBedDesc>
