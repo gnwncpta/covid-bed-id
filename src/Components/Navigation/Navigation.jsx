@@ -1,10 +1,13 @@
 import './Navigation.css';
+import X from '../../assets/X.svg';
+import Hamburger from '../../assets/Menu.svg';
 import { useState } from 'react';
 import { BrowserRouter as Router, Switch, Link, Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Home from '../Home/Home';
 import Menu from '../Menu/Menu';
+import MenuNavigation from '../MenuNavigation/MenuNavigation';
 import EmergencyContact from '../EmergencyContact/EmergencyContact';
 import Logo from '../../assets/Logo.svg';
 import HomeIcon from '../../assets/home-icon.svg';
@@ -15,6 +18,29 @@ const LogoImage = styled.div`
     height:calc(75px / 2);
     background-size: cover;
     background-image: url(${Logo});
+`;
+
+const MenuButton = styled.div`
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    border-radius: 5px;
+    border: none;
+    background-color: ${props => props.highlighted ? "#2F82FF" : "transparent"};
+
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:active {
+        background-color: #2F82FF;
+    }
+`;
+
+const MenuButtonIcon = styled.img`
+    width: 18px;
 `;
 
 const NavigationContainer = styled.div`
@@ -69,6 +95,7 @@ const Wrapper = styled.div`
 `;
 
 const BottomContainer = styled.div`
+    z-index: 3;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -121,23 +148,35 @@ const Title = styled.p`
     font-size: 12px;
 `;
 
+
 export default function Navigation(props){
 
     const [ emergency, setEmergency ] = useState(false);
+    const [ menu, setMenu ] = useState(false);
+
+    const TopContainerHandler = () => {
+        alert('Blue Nav Clicked.');
+    }
+
 
     return (
         <Router>
             <NavigationContainer>
 
-                <TopContainer>
+                <TopContainer onClick={TopContainerHandler}>
                     <Wrapper top>
                         <LogoImage />
+
+                        <MenuButton highlighted={menu} onClick={() => setMenu(menu ? false : true)}>
+                            <img src={menu ? X : Hamburger} width="30px" />
+                        </MenuButton>
                     </Wrapper>
                 </TopContainer>
 
                 <Switch>
                     <Route exact path="/">
-                        {emergency ? <Redirect to="/emergency-contact" /> : <Home setEmergency={setEmergency}/>}
+                        <MenuNavigation show={menu} setEmergency={setEmergency} setMenu={setMenu} />
+                        {emergency ? <Redirect to="/emergency-contact" /> : <Home setEmergency={setEmergency} />}
                     </Route>
 
                     <Route path="/menu">
@@ -145,7 +184,8 @@ export default function Navigation(props){
                     </Route>
 
                     <Route path="/emergency-contact">
-                        <EmergencyContact />
+                        <MenuNavigation show={menu} setMenu={setMenu} />
+                        <EmergencyContact/>
                     </Route>
                 </Switch>
 
