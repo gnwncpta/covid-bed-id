@@ -43,6 +43,8 @@ const Header = styled.div`
 const Title = styled.h1`
     color: #111;
     font-size: 26px;
+    font-weight: 600;
+    margin: 5px 0;
 `;
 
 const Desc = styled.p`
@@ -152,6 +154,7 @@ const ServiceTitle = styled.p`
     color: #111;
     font-size: 16px;
     font-weight: 600;
+    margin: 15px 0;
 `;
 
 const ServiceArrow = styled.div`
